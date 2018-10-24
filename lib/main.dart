@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Login.dart';
+import 'package:flutter_demo/Settings.dart';
 
 void main() => runApp(new MyApp());
 
@@ -43,16 +45,49 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  String _title = "Please login";
+  Widget _screen;
+  Login _login;
+  Settings _settings;
+  bool _authenticated;
+
+  _MyHomePageState(){
+    _login = new Login(onSubmit: (){onSubmit();}, );
+    _settings = new Settings();
+    _screen = _login;
+    _authenticated = false;
+  }
+
+  void onSubmit(){
+    print("Login with "+ _login.username);
+    if(_login.username == 'user' && _login.password == 'pwd'){
+      _setAuthenticated(true);
+    }else{
+      print("Usuario y contraseña incorrecto");
+    }
+  }
+
+  void goHome(){
+    print('go home');
+    setState((){
+      if(_authenticated == true){
+        _screen = _settings;        
+      }else{
+        _screen = _login;
+      }
+    });
+  }
+
+  void _setAuthenticated(bool auth){
+    setState((){
+      if(auth==true){
+        _screen = _settings;
+        _title = 'Welcome';
+      }else{
+        _screen = _login;
+        _title = 'Please Login';
+      }
     });
   }
 
@@ -68,42 +103,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
+        title: new Text(_title),
       ),
-      body: new Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: new Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug paint" (press "p" in the console where you ran
-          // "flutter run", or select "Toggle Debug Paint" from the Flutter tool
-          // window in IntelliJ) to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: _screen
     );
   }
 }
+
