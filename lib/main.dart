@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Login.dart';
 import 'package:flutter_demo/Settings.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(new MyApp());
 
@@ -60,6 +61,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void onSubmit(){
+    print('before request to the server');
+    String url = "https://flutter-demo-server.herokuapp.com/accounts/api/login/";
+
+    http
+    .post(url, body: {"username": _login.username, "password": _login.password})
+    .then((http.Response response) {
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+    });
+
+
     print("Login with "+ _login.username);
     if(_login.username == 'user' && _login.password == 'pwd'){
       _setAuthenticated(true);
@@ -104,8 +116,18 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text(_title),
+        actions: <Widget>[
+          new IconButton(
+            icon:Icon(Icons.exit_to_app),
+            onPressed: (){
+              _setAuthenticated(false);
+            },
+            tooltip: "Salir",
+          )
+        ],
       ),
       body: _screen
+      
     );
   }
 }
