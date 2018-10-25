@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
-  const Login({
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({
     Key key,
     @required this.onSubmit    
   }) : super(key:key);

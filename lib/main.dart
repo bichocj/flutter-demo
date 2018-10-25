@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/Login.dart';
-import 'package:flutter_demo/Settings.dart';
+import 'package:flutter_demo/screens/login/login_screen.dart';
+import 'package:flutter_demo/screens/settings.dart';
 import 'package:http/http.dart' as http;
 
 void main() => runApp(new MyApp());
@@ -49,12 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _title = "Please login";
   Widget _screen;
-  Login _login;
+  LoginScreen _login;
   Settings _settings;
   bool _authenticated;
 
   _MyHomePageState(){
-    _login = new Login(onSubmit: (){onSubmit();}, );
+    _login = new LoginScreen(onSubmit: (){onSubmit();}, );
     _settings = new Settings();
     _screen = _login;
     _authenticated = false;
