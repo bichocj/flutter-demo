@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 abstract class LoginScreenContract {
   void onLoginSuccess(String token);
@@ -10,31 +11,27 @@ class LoginScreenPresenter {
   LoginScreenPresenter(this._view);
 
   doLogin(String username, String password) {
+    String url = "https://flutter-demo-server.herokuapp.com/accounts/api/login/";
+
     http
-        .post(url, body: {"username": _login.username, "password": _login.password})
-        .then((http.Response response) {
-          print("Response status: ${response.statusCode}");
-          print("Response body: ${response.body}");
+        .post(url, body: {"username": username, "password": password})
+        .then((http.Response response) {   
+          final int statusCode = response.statusCode;
+          final String res = response.body;
+
+          if (statusCode < 200 || statusCode > 400) {
+            throw new Exception("Error while fetching data");
+          }
+
+          final JsonDecoder _decoder = new JsonDecoder();
+          dynamic _responseJson = _decoder.convert(res);
+
+          if (_responseJson["non_field_errors"] != null) {            
+            _view.onLoginError(_responseJson["non_field_errors"][0]);
+          }else if(_responseJson["key"] != null){
+            String token = _responseJson["key"];
+            _view.onLoginSuccess(token);
+          }
         });
-
-
-        print("Login with "+ _login.username);
-        if(_login.username == 'user' && _login.password == 'pwd'){
-          _setAuthenticated(true);
-        }else{
-          print("Usuario y contraseña incorrecto");
-        }
-
-    try{
-    api.login(username, password).then((String token) {
-        _view.onLoginSuccess(token);
-
-    }).catchError((handleError) => 
-      _view.onLoginError(handleError.message)
-    );
-    }catch(e){
-      print(e.toString());  
-    }
   }
-
 }

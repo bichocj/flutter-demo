@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _authenticated;
 
   _MyHomePageState(){
-    _login = new LoginScreen(onSubmit: (){onSubmit();}, );
+    _login = new LoginScreen();
     _settings = new Settings();
     _screen = _login;
     _authenticated = false;
