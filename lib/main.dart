@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Login _login;
   Settings _settings;
   bool _authenticated;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   _MyHomePageState(){
     _login = new Login(onSubmit: (){onSubmit();}, );
@@ -66,18 +67,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     http
     .post(url, body: {"username": _login.username, "password": _login.password})
-    .then((http.Response response) {
-      print("Response status: ${response.statusCode}");
-      print("Response body: ${response.body}");
+    .then((http.Response response) {      
+      if(response.statusCode == 200){
+        _setAuthenticated(true);
+      }else{
+        _setAuthenticated(false);
+         scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text("usuario o contraseña incorrecto")));
+      }
+      
     });
-
-
-    print("Login with "+ _login.username);
-    if(_login.username == 'user' && _login.password == 'pwd'){
-      _setAuthenticated(true);
-    }else{
-      print("Usuario y contraseña incorrecto");
-    }
   }
 
   void goHome(){
@@ -112,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return new Scaffold(
+       key: scaffoldKey,
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
