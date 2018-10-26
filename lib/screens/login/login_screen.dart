@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget implements LoginScreenContract{
 
   void onLoginSuccess(String token){
     print(token);
-     Navigator.pushNamed(_ctx, '/second');
+     Navigator.pushNamed(_ctx, '/clients');
   }
   void onLoginError(String errorTxt){
     print(errorTxt);
