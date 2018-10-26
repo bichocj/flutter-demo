@@ -4,6 +4,7 @@ import './login_screen_presenter.dart';
 class LoginScreen extends StatelessWidget implements LoginScreenContract{
   
   LoginScreen();
+   BuildContext _ctx;
   
   //LoginScreenPresenter _presenter;  
   static final TextEditingController _username = new TextEditingController();
@@ -20,6 +21,7 @@ class LoginScreen extends StatelessWidget implements LoginScreenContract{
 
   void onLoginSuccess(String token){
     print(token);
+     Navigator.pushNamed(_ctx, '/second');
   }
   void onLoginError(String errorTxt){
     print(errorTxt);
@@ -27,14 +29,23 @@ class LoginScreen extends StatelessWidget implements LoginScreenContract{
 
   @override
   Widget build(BuildContext context){
-    return new Column(children: <Widget>[
-      new TextField(controller: _username, decoration: new InputDecoration(hintText: 'Enter a username'),),
-      new TextField(controller: _password, decoration: new InputDecoration(hintText: 'Enter a password'),),
-      new RaisedButton(
-        child: new Text("Iniciar sesion"),
-        onPressed: (){this.onSubmit();},
-      )
-    ],
-    );
+    _ctx = context;
+    return Scaffold(
+      body: 
+        new Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: new Column(children: <Widget>[
+            new TextField(controller: _username, decoration: new InputDecoration(hintText: 'Enter a username'),),
+            new TextField(controller: _password, decoration: new InputDecoration(hintText: 'Enter a password'),),
+            new RaisedButton(
+              child: new Text("Iniciar sesion"),
+              onPressed: (){this.onSubmit();},
+            )
+          ],        
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          )
+        )
+    );     
   }
 }
