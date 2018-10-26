@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './client_screen_presenter.dart';
 
 class ClientScreen extends StatefulWidget {
   ClientScreen();
@@ -7,8 +8,21 @@ class ClientScreen extends StatefulWidget {
   _ClientScreenState createState() => new _ClientScreenState();
 }
 
-class _ClientScreenState extends State<ClientScreen> {
-  _ClientScreenState();
+class _ClientScreenState extends State<ClientScreen> implements ClientScreenContract  {
+  ClientScreenPresenter _presenter;
+
+  _ClientScreenState(){
+    _presenter = ClientScreenPresenter(this);
+    _presenter.requestClients();
+  }
+
+  void onClientSuccess(dynamic clients){
+    print(clients);
+  }
+  
+  void onClientError(String errorTxt){
+
+  }
 
   @override
   Widget build(BuildContext context) {
