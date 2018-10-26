@@ -16,6 +16,16 @@ class _ClientScreenState extends State<ClientScreen> implements ClientScreenCont
     _presenter.requestClients();
   }
 
+/*
+  List<Client> _list;
+
+  @override
+  void initState() {
+    super.initState();
+    _list = [];   
+  }
+*/
+
   void onClientSuccess(dynamic clients){
     print(clients);
   }
@@ -39,7 +49,9 @@ class _ClientScreenState extends State<ClientScreen> implements ClientScreenCont
           )
         ],
       ),
-      body: Text("Lista de clientes")      
+      body: ListView(
+        children: <Widget>[],
+      )
     );
   }
 }

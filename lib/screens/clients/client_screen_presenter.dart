@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_demo/models/Client.dart';
 
 abstract class ClientScreenContract {
   void onClientSuccess(dynamic clients);
@@ -30,7 +31,10 @@ class ClientScreenPresenter {
     return getData(url, queryParameters, "71e3648aac89440dfc19a4dd550231ce597951c1").then((dynamic rr){
       final JsonDecoder _decoder = new JsonDecoder();
       final dynamic res =  _decoder.convert(rr);
-      _view.onClientSuccess(res);
+
+      final itemsTmp = res.map((i) => new Client.map(i));
+      final items = itemsTmp.cast<Client>();    
+      _view.onClientSuccess(items.toList());
     });
     
 
