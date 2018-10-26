@@ -60,26 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _authenticated = false;
   }
 
-  void onSubmit(){
-    print('before request to the server');
-    String url = "https://flutter-demo-server.herokuapp.com/accounts/api/login/";
-
-    http
-    .post(url, body: {"username": _login.username, "password": _login.password})
-    .then((http.Response response) {
-      print("Response status: ${response.statusCode}");
-      print("Response body: ${response.body}");
-    });
-
-
-    print("Login with "+ _login.username);
-    if(_login.username == 'user' && _login.password == 'pwd'){
-      _setAuthenticated(true);
-    }else{
-      print("Usuario y contraseña incorrecto");
-    }
-  }
-
   void goHome(){
     print('go home');
     setState((){
