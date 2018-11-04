@@ -19,18 +19,21 @@ class _ClientScreenState extends State<ClientScreen> implements ClientScreenCont
 
 
   List<Client> _list;
+  bool _isLoading;
 
   @override
   void initState() {
     super.initState();
     _list = [];   
+    _isLoading = true;
   }
 
 
-  void onClientSuccess(dynamic clients){
+  void onClientSuccess(List<Client> clients){
     print(clients);
-     setState(() {
-      _list = clients;      
+    setState(() {
+      _isLoading = false;
+      _list = clients;       
     });
   }
   
@@ -60,11 +63,23 @@ class _ClientScreenState extends State<ClientScreen> implements ClientScreenCont
         ],
       ),
       body: ListView(
-         padding: new EdgeInsets.symmetric(vertical: 8.0),
-        children: _buildList(),
+        padding: new EdgeInsets.symmetric(vertical: 8.0),
+        children: _isLoading ? <Widget>[
+          Center(
+            child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: CircularProgressIndicator()
+              )
+          ),          
+        ] : _buildList(),
+        
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {          
+          setState(() {      
+            _isLoading = true;   
+          });
           this._presenter.requestClients();          
         },        
         child: new Icon(

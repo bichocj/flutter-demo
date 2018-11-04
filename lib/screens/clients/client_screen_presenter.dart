@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_demo/models/Client.dart';
 
 abstract class ClientScreenContract {
-  void onClientSuccess(dynamic clients);
+  void onClientSuccess(List<Client> clients);
   void onClientError(String errorTxt);
 }
 
