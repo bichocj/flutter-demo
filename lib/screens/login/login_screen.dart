@@ -10,8 +10,7 @@ class LoginScreen extends StatelessWidget implements LoginScreenContract{
   }
 
   BuildContext _ctx;
-  SharedPreferences prefs;
-
+  
   //LoginScreenPresenter _presenter;  
   static final TextEditingController _username = new TextEditingController();
   static final TextEditingController _password = new TextEditingController();

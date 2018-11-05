@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './client_screen_presenter.dart';
 import 'package:flutter_demo/models/Client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClientScreen extends StatefulWidget {
   ClientScreen();
@@ -11,10 +12,21 @@ class ClientScreen extends StatefulWidget {
 
 class _ClientScreenState extends State<ClientScreen> implements ClientScreenContract  {
   ClientScreenPresenter _presenter;
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+	SharedPreferences _sharedPreferences;
+
 
   _ClientScreenState(){
     _presenter = ClientScreenPresenter(this);
-    _presenter.requestClients();
+    _requestClients();
+  }
+
+  _requestClients() async{    
+    if(_sharedPreferences == null){
+      _sharedPreferences = await _prefs;
+    }
+    String authToken = _sharedPreferences.getString("token");
+    _presenter.requestClients(authToken);    
   }
 
 
@@ -80,7 +92,7 @@ class _ClientScreenState extends State<ClientScreen> implements ClientScreenCont
           setState(() {      
             _isLoading = true;   
           });
-          this._presenter.requestClients();          
+          _requestClients();
         },        
         child: new Icon(
           Icons.refresh,

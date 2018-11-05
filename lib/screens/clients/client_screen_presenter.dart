@@ -24,11 +24,11 @@ class ClientScreenPresenter {
     return  responseBody;
 }
 
-  requestClients() async {
+  requestClients(String token) async {
     var url  =  "/clients/api/clients/";
     Map<String, String> queryParameters = Map<String, String>();
 
-    return getData(url, queryParameters, "71e3648aac89440dfc19a4dd550231ce597951c1").then((dynamic rr){
+    return getData(url, queryParameters, token).then((dynamic rr){
       final JsonDecoder _decoder = new JsonDecoder();
       final dynamic res =  _decoder.convert(rr);
 
