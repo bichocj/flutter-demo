@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import './login_screen_presenter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_demo/my_tabs.dart';
 
 class LoginScreen extends StatelessWidget implements LoginScreenContract{
   
-  LoginScreen();
-   BuildContext _ctx;
-  
+  LoginScreen(){
+    _fetchSessionAndNavigate();
+  }
+
+  BuildContext _ctx;
+  SharedPreferences prefs;
+
   //LoginScreenPresenter _presenter;  
   static final TextEditingController _username = new TextEditingController();
   static final TextEditingController _password = new TextEditingController();
+
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+	SharedPreferences _sharedPreferences;
 
   String get username => _username.text;
   String get password => _password.text;
@@ -19,9 +28,23 @@ class LoginScreen extends StatelessWidget implements LoginScreenContract{
     _presenter.doLogin(username, password);
   }
 
+  _authenticateUserAndNavigate(String token) async {    
+      _sharedPreferences.setString("token", token);      
+      Navigator.of(_ctx).pushReplacementNamed(MyTabs.routeName);
+  }
+
+  _fetchSessionAndNavigate() async {
+		_sharedPreferences = await _prefs;
+		String authToken = _sharedPreferences.getString("token");
+		if(authToken != null) {
+			Navigator.of(_ctx).pushReplacementNamed(MyTabs.routeName);
+		}
+	}
+
+
   void onLoginSuccess(String token){
-    print(token);
-     Navigator.pushNamed(_ctx, '/clients');
+    print(token);        
+    _authenticateUserAndNavigate(token);
   }
   void onLoginError(String errorTxt){
     print(errorTxt);
